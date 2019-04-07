@@ -7,6 +7,7 @@ Copy/Move the files that doesn't exist in a Windows folder but exist in an Andro
 # Example
 ```
 diffAW -a "/storage/49ED-1907/musica uwu" -w "C:\Users\Dani\Music\musica uwu" -t "\music deleted" -ra y -ra y -m y -v 2
+diffAW -a androidPath -w windowsPath [-t diffFolder] [-ra (y|n)] [-ra (y|n)] [-m (y|n)] [-v (1|2|3)]
 ```
 The first time it would create an adb folder, that's because the app comunicates with the device through adb
 
