@@ -6,28 +6,18 @@ namespace diffAW
 {
     class WindowsManager
     {
-        string path;
-        string pathToMove;
         List<FileInfo> files;
-        bool shouldMove;
-        public WindowsManager(string path)
+        public WindowsManager()
         {
-            shouldMove = true;
-            this.path = path;
-            pathToMove = path + @"\temp\";
-            if (!Directory.Exists(pathToMove))
+            if (!Directory.Exists(Program.pathToMove))
             {
-                Directory.CreateDirectory(pathToMove);
-            }
-            else
-            {
-                Directory.Delete(pathToMove, true);
-                Directory.CreateDirectory(pathToMove);
+                Console.WriteLine("To: " + Program.pathToMove);
+                Directory.CreateDirectory(Program.pathToMove);
             }
         }
         public List<String> getLocalFiles()
         {
-            files = getFilesInPath(path);
+            files = getFilesInPath();
             List<int> toRemove = new List<int>();
             List<String> stringFiles = new List<String>();
             for(int i=0; i<files.Count; i++)
@@ -48,16 +38,23 @@ namespace diffAW
             return stringFiles;
         }
 
-        public void moveSong(int index)
+        public void moveFile(int index)
         {
             FileInfo actualFile = files[index];
-            if (shouldMove)
+            try
             {
-                actualFile.MoveTo(pathToMove + actualFile.Name);
+                if (Program.move)
+                {
+                    actualFile.MoveTo(Program.pathToMove + actualFile.Name);
+                }
+                else
+                {
+                    actualFile.CopyTo(Program.pathToMove + actualFile.Name, true);
+                }
             }
-            else
+            catch(IOException e)
             {
-                actualFile.CopyTo(pathToMove + actualFile.Name, true);
+                Console.WriteLine("Cannot move " + actualFile.Name);
             }
         }
 
@@ -66,10 +63,10 @@ namespace diffAW
             //I have some albumarts on the folder, but i don't need them
             return fileName.Contains("AlbumArt");
         }
-        List<FileInfo> getFilesInPath(string _path)
+        List<FileInfo> getFilesInPath()
         {
             string match = "*.*";
-            string[] files = Directory.GetFiles(_path, match, SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(Program.pathToLocal, match, (Program.recursiveWindows ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
             List<FileInfo> toReturn=new List<FileInfo>();
             foreach(String file in files)
             {

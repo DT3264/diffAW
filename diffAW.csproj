@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9B87E2FC-293D-49CB-BF73-82BC3178673A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Android_Windows_Focler_Diff</RootNamespace>
-    <AssemblyName>Android-Windows-Focler-Diff</AssemblyName>
+    <RootNamespace>diffAW</RootNamespace>
+    <AssemblyName>diffAW</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

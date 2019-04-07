@@ -14,16 +14,9 @@ namespace diffAW
 {
     class AndroidManager
     {
-        string devicePath;
-        bool recursiveSearch;
         List<String> files;
         IDeviceInfo androidDevice;
-        public AndroidManager(string path, bool recursiveSearch)
-        {
-            devicePath = path;
-            this.recursiveSearch = recursiveSearch;
-
-        }
+        Dictionary<String, bool> recursiveFolders = new Dictionary<string, bool>();
         public bool prepareADB()
         {
             Console.WriteLine("Preparing ADB");
@@ -43,7 +36,7 @@ namespace diffAW
         public List<String> getAndroidFiles()
         {
             files = new List<string>();
-            Directories _ADBD = ADB.Instance(androidDevice).Device.IO.Directories(devicePath);
+            Directories _ADBD = ADB.Instance(androidDevice).Device.IO.Directories(Program.pathToDevice);
             _ADBD.Parse(DirectoryParserEventHandler);
             return files;
         }
@@ -54,6 +47,7 @@ namespace diffAW
                 files = new List<string>();
             }
             Directories _ADBD = ADB.Instance(androidDevice).Device.IO.Directories(path);
+            Console.WriteLine("Looking in " + path);
             _ADBD.Parse(DirectoryParserEventHandler);
             return files;
         }
@@ -63,9 +57,8 @@ namespace diffAW
             {
                 files.Add(niceFileName(e.Element.Path));
             }
-            else if(e.Element.ID==FileType.Directory && recursiveSearch)
+            else if(e.Element.ID==FileType.Directory && Program.recursiveAndroid)
             {
-                Console.WriteLine("Looking in " + e.Element.Path);
                 getAndroidFiles(e.Element.Path);
             }
         }
