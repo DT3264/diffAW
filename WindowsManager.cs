@@ -7,14 +7,6 @@ namespace diffAW
     class WindowsManager
     {
         List<FileInfo> files;
-        public WindowsManager()
-        {
-            if (!Directory.Exists(Program.pathToMove))
-            {
-                Console.WriteLine("To: " + Program.pathToMove);
-                Directory.CreateDirectory(Program.pathToMove);
-            }
-        }
         public List<String> getLocalFiles()
         {
             files = getFilesInPath();
@@ -38,26 +30,6 @@ namespace diffAW
             return stringFiles;
         }
 
-        public void moveFile(int index)
-        {
-            FileInfo actualFile = files[index];
-            try
-            {
-                if (Program.move)
-                {
-                    actualFile.MoveTo(Program.pathToMove + actualFile.Name);
-                }
-                else
-                {
-                    actualFile.CopyTo(Program.pathToMove + actualFile.Name, true);
-                }
-            }
-            catch(IOException e)
-            {
-                Console.WriteLine("Cannot move " + actualFile.Name);
-            }
-        }
-
         bool skipFile(string fileName)
         {
             //I have some albumarts on the folder, but i don't need them
@@ -66,7 +38,7 @@ namespace diffAW
         List<FileInfo> getFilesInPath()
         {
             string match = "*.*";
-            string[] files = Directory.GetFiles(Program.pathToLocal, match, (Program.recursiveWindows ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
+            string[] files = Directory.GetFiles(Program.pathToLocal, match, SearchOption.AllDirectories);
             List<FileInfo> toReturn=new List<FileInfo>();
             foreach(String file in files)
             {

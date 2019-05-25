@@ -47,7 +47,7 @@ namespace diffAW
                 files = new List<string>();
             }
             Directories _ADBD = ADB.Instance(androidDevice).Device.IO.Directories(path);
-            Console.WriteLine("Looking in " + path);
+            //Console.WriteLine("Looking in the folder " + path);
             _ADBD.Parse(DirectoryParserEventHandler);
             return files;
         }
@@ -57,7 +57,7 @@ namespace diffAW
             {
                 files.Add(niceFileName(e.Element.Path));
             }
-            else if(e.Element.ID==FileType.Directory && Program.recursiveAndroid)
+            else if(e.Element.ID==FileType.Directory)
             {
                 getAndroidFiles(e.Element.Path);
             }
