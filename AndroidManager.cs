@@ -14,9 +14,10 @@ namespace diffAW
 {
     class AndroidManager
     {
-        List<String> files;
-        IDeviceInfo androidDevice;
-        Dictionary<String, bool> recursiveFolders = new Dictionary<string, bool>();
+        private List<String> files;
+        private IDeviceInfo androidDevice;
+        private Dictionary<String, bool> recursiveFolders = new Dictionary<string, bool>();
+        private bool isAdbStarted;
         public bool prepareADB()
         {
             Console.WriteLine("Preparing ADB");
@@ -26,12 +27,21 @@ namespace diffAW
             }
             Console.WriteLine("Starting ADB");
             ADB.Start();
+            isAdbStarted = true;
             if (ADB.Devices().ToArray().Length > 0)
             {
                 //Grabs the first device in the list
                 androidDevice = ADB.Devices().ToArray()[0];
             }
             return ADB.Devices().ToArray().Length > 0;
+        }
+        public void closeAdb()
+        {
+            if (isAdbStarted)
+            {
+                isAdbStarted = false;
+                ADB.Dispose();
+            }
         }
         public List<String> getAndroidFiles()
         {
@@ -62,7 +72,6 @@ namespace diffAW
                 getAndroidFiles(e.Element.Path);
             }
         }
-
         public string niceFileName(string fileName)
         {
             string[] arr = fileName.Split('/');

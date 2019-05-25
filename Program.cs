@@ -25,7 +25,7 @@ namespace diffAW
             if (!deviceManager.prepareADB())
             {
                 Console.WriteLine("There's no device connected");
-                finish();
+                deviceManager.closeAdb();
                 return;
             }
             androidFiles = deviceManager.getAndroidFiles();
@@ -38,25 +38,25 @@ namespace diffAW
             fillDict(windowsFiles, windowsDict);
             //println("***********************\n");
 
-            Dictionary<String, bool> notInWIndows = flipDict(windowsDict, androidDict);
-            Dictionary<String, bool> notInAndroid = flipDict(androidDict, windowsDict);
+            SortedDictionary<String, bool> notInWIndows = flipDict(windowsDict, androidDict);
+            SortedDictionary<String, bool> notInAndroid = flipDict(androidDict, windowsDict);
             
             println("Not in windows:");
             foreach (KeyValuePair<String, bool> pair in notInWIndows)
             {
                 println(pair.Key);
             }
-            println("**************\n");
+            println("\n**************\n");
             println("Not in android:");
             foreach (KeyValuePair<String, bool> pair in notInAndroid)
             {
                 println(pair.Key);
             }
-            finish();
+            deviceManager.closeAdb();
         }
-        static Dictionary<String, bool> flipDict(Dictionary<String, bool> dict1, Dictionary<String, bool> dict2)
+        static SortedDictionary<String, bool> flipDict(Dictionary<String, bool> dict1, Dictionary<String, bool> dict2)
         {
-            Dictionary<String, bool> tmpDict = new Dictionary<string, bool>(dict2);
+            SortedDictionary<String, bool> tmpDict = new SortedDictionary<string, bool>(dict2);
             foreach(KeyValuePair<String, bool> pair in dict1)
             {
                 if (tmpDict.ContainsKey(pair.Key)) {
@@ -105,11 +105,6 @@ namespace diffAW
                 return false;
             }
             return true;
-        }
-        static void finish()
-        {
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
         }
         static void println(Object msg)
         {
